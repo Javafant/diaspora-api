@@ -28,7 +28,7 @@ class Post:
                                      post_id +
                                      '.json')
         if r.status_code == 200:
-            self.data = r.json()
+            self.data = r.json
         else:
             raise Exception('wrong status code: ' + str(r.status_code))
 
@@ -51,7 +51,7 @@ class Post:
         if r.status_code != 201:
             raise Exception(str(r.status_code) + ': Post could not be liked.')
 
-        return r.json()
+        return r.json
 
     def rmlike(self):
         """This function removes a like from a post
@@ -88,7 +88,7 @@ class Post:
             raise Exception(str(r.status_code) +
                             ': Post could not be reshared.')
 
-        return r.json()
+        return r.json
 
     def comment(self, text):
         """This function comments on a post
@@ -114,7 +114,7 @@ class Post:
             raise Exception(str(r.status_code) +
                             ': Comment could not be posted.')
 
-        return r.json()
+        return r.json
 
     def rmcomment(self, comment_id):
         """This function removes a comment from a post
