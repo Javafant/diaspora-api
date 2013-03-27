@@ -8,7 +8,7 @@ class Client:
     """This is the client class to connect to Diaspora.
 
     """
-    def __init__(self, pod, username, password):
+    def __init__(self, pod, username='', password=''):
         """
         :param pod: The complete url of the diaspora pod to use.
         :type pod: str
@@ -58,6 +58,18 @@ class Client:
         
         if r.status_code != 201: raise Exception('{0}: Login failed.'.format(r.status_code))
         else: self.logged_in = True
+
+    def login(self, username, password):
+        """
+        Public function for logging in.
+
+        :param username: The username used to log in.
+        :type username: str
+        :param password: The password used to log in.
+        :type password: str
+        """
+        self._setlogindata(self.username, self.password)
+        self._login()
     
     def post(self, text, aspect_id='public', photos=None):
         """This function sends a post to an aspect

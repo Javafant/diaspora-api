@@ -6,8 +6,25 @@ Then, if no errors are raised, you can `_login()` to the pod with given username
 
     import diaspy
 
-    client = diaspy.Client(pod="http://pod.example.com/", username="foo", password="bar")
+    client = diaspy.Client(pod="http://pod.example.com", username="foo", password="bar")
     client._login()
 
 
 If everything worked you are now connected to D\* pod at given URL.
+
+----
+
+##### Connecting with `login()`
+
+Note, that there is an alternative (more explicit) way for logging in. 
+When creating new instance of `Client()` you feed give it only the pod URL and 
+the call `login()` method with username and password. 
+
+    import diaspy
+
+    client = diaspy.Client(pod="http://pod.example.com")
+    client.login(username="foo", password="bar")
+
+
+**ATTENTION:** `username` and `password` passed to `login()` will override ones specified when 
+creating new instace of `Client()`
