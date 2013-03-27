@@ -8,7 +8,7 @@ class Client:
     """This is the client class to connect to Diaspora.
 
     """
-    def __init__(self, pod, username, password):
+    def __init__(self, pod, username='', password=''):
         """
         :param pod: The complete url of the diaspora pod to use.
         :type pod: str
@@ -20,6 +20,7 @@ class Client:
         """
         self._token_regex = re.compile(r'content="(.*?)"\s+name="csrf-token')
         self.pod = pod
+        self.logged_in = False
         self.session = requests.Session()
         self._setlogindata(username, password)
 
@@ -56,6 +57,19 @@ class Client:
                               headers={'accept': 'application/json'})
         
         if r.status_code != 201: raise Exception('{0}: Login failed.'.format(r.status_code))
+        else: self.logged_in = True
+
+    def login(self, username, password):
+        """
+        Public function for logging in.
+
+        :param username: The username used to log in.
+        :type username: str
+        :param password: The password used to log in.
+        :type password: str
+        """
+        self._setlogindata(self.username, self.password)
+        self._login()
     
     def post(self, text, aspect_id='public', photos=None):
         """This function sends a post to an aspect
@@ -127,11 +141,7 @@ class Client:
             raise Exception('wrong status code: {0}'.format(r.status_code))
 
         stream = r.json()
-
-        posts = []
-
-        for post in stream: 
-            posts.append(diaspy.models.Post(str(post['id']), self))
+        posts = [ diaspy.models.Post(str(post['id']), self) for post in stream ]
 
         return posts
 
@@ -166,11 +176,7 @@ class Client:
             raise Exception('wrong status code: {0}'.format(r.status_code))
 
         mentions = r.json()
-
-        posts = []
-
-        for post in mentions:
-            posts.append(diaspy.models.Post(str(post['id']), self))
+        posts = [ diaspy.models.Post(str(post['id']), self) for post in mentions ]
 
         return posts
 
@@ -190,11 +196,7 @@ class Client:
             raise Exception('wrong status code: {0}'.format(r.status_code))
 
         tagged_posts = r.json()
-
-        posts = []
-
-        for post in tagged_posts:
-            posts.append(diaspy.models.Post(str(post['id']), self))
+        posts = [ diaspy.models.Post(str(post['id']), self) for post in tagged_posts ]
 
         return posts
 
@@ -281,11 +283,7 @@ class Client:
             raise Exception('wrong status code: {0}'.format(r.status_code))
 
         mailbox = r.json()
-
-        conversations = []
-
-        for conversation in mailbox:
-            conversations.append(diaspy.conversations.Conversation(str(conversation['conversation']['id']), self))
+        conversations = [ diaspy.conversations.Conversation(str(conversation['conversation']['id']), self) for conversation in mailbox ]
 
         return conversations
 
