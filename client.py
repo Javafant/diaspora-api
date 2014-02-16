@@ -18,7 +18,7 @@ class Client():
 
 
     def _fetch_token(self):
-        response = self.session.get("{0}/stream".format(self.pod))
+        response = self.session.get("{0}/stream".format(self.pod),verify=False)
         return self._token_regex.search(response.text).group(1)
 
     def post(self, text, aspect_ids='public'):
